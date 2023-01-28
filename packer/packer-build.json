@@ -22,7 +22,7 @@
             "subnet_id": "{{user `subnet_id`}}",
             "ami_name": "{{user `ami_name`}}",
             "vpc_id": "{{user `vpc_id`}}",
-            "source_ami": "ami-04505e74c0741db8d",
+            "source_ami": "ami-08fdec01f5df9998f",
             "run_tags": {
                 "Name": "packer-build-image"
             }
