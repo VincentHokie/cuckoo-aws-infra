@@ -35,6 +35,40 @@
         },
         {
             "type": "shell",
+            "script": "./provisioners/scripts/base-install.sh"
+        },
+        {
+            "type": "file",
+            "source": "./files/nginx-config",
+            "destination": "/etc/nginx/sites-available/cuckoo-web"
+        },
+        {
+            "type": "file",
+            "source": "./files/self-signed.conf",
+            "destination": "/etc/nginx/snippets/self-signed.conf"
+        },
+        {
+            "type": "file",
+            "source": "./files/ssl-params.conf",
+            "destination": "/etc/nginx/snippets/ssl-params.conf"
+        },
+        {
+            "type": "file",
+            "source": "./files/uwsgi-config.ini",
+            "destination": "/etc/uwsgi/apps-available/cuckoo-web.ini"
+        },
+        {
+            "type": "file",
+            "source": "./files/nginx-config-api",
+            "destination": "/etc/nginx/sites-available/cuckoo-api"
+        },
+        {
+            "type": "file",
+            "source": "./files/uwsgi-config-api.ini",
+            "destination": "/etc/uwsgi/apps-available/cuckoo-api.ini"
+        },
+        {
+            "type": "shell",
             "script": "./provisioners/scripts/cuckoo.sh"
         }
     ]
