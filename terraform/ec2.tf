@@ -1,6 +1,6 @@
 
 resource "aws_instance" "cuckoo_server" {
-  ami           = "ami-03e848ff8424083f8"
+  ami           = "ami-0cd7aedfdb01be92b"
   instance_type = "c5.metal"
 
   key_name = "project-c"
@@ -14,7 +14,7 @@ resource "aws_instance" "cuckoo_server" {
   monitoring = true
 
   root_block_device {
-    volume_size = 80
+    volume_size = 300
   }
 
 }
