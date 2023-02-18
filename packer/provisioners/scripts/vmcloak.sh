@@ -1,8 +1,17 @@
 # VM setup
 
-sudo mkdir -p /mnt/win7
-wget https://cuckoo.sh/win7ultimate.iso
-sudo mount -o ro,loop win7ultimate.iso /mnt/win7
+wget --output-document win7x64.iso --continue https://cuckoo.sh/win7ultimate.iso
+
+wget --output-document win7x86.iso --continue https://ss2.softlay.com/files/en_windows_7_ultimate_x86_dvd.iso
+
+wget --output-document win81x64.iso --continue https://ss2.softlay.com/files/en_windows_8_1_pro_vl_x64_dvd_2971948.iso
+
+wget --output-document win81x86.iso --continue https://ss2.softlay.com/files/en_windows_8_1_pro_vl_x86_dvd_2972633.iso
+
+wget --output-document win10x86.iso --continue https://ss2.softlay.com/files/en_Windows_10_1607_build_14393_x32_dvd.iso
+
+wget --output-document win10x64.iso --continue https://ss2.softlay.com/files/en_Windows_10_1607_build_14393_x64_dvd.iso
+
 
 sudo apt-get -y install genisoimage
 # sudo apt-get update
@@ -15,11 +24,37 @@ VBoxManage setextradata global "HostOnly/vboxnet0/NetworkMask" 255.255.255.0
 
 source venv/bin/activate
 
-vmcloak init --verbose --win7x64 win7x64base --cpus 2 --ramsize 2048
-vmcloak clone win7x64base win7x64cuckoo
-vmcloak install win7x64cuckoo adobepdf pillow dotnet java flash vcredist vcredist.version=2015u3 wallpaper ie11
-vmcloak install win7x64cuckoo office office.version=2007 office.isopath=/path/to/office2007.iso office.serialkey=XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
-vmcloak snapshot --count 4 win7x64cuckoo 192.168.56.101
+for os in 7 81 10; do
+
+    for arch in 64 86; do
+
+        [[ $os = 10 ]] && ramsize="5120" || ramsize="2048"
+
+        case "$os" in
+            81) vmip="192.168.56.10" ;;
+            7) vmip="192.168.56.30" ;;
+            10) vmip="192.168.56.50" ;;
+            *) vmip="192.168.56.70" ;;
+        esac
+        osarch=${os}x${arch}
+        sudo mkdir -p /mnt/win${osarch}
+        sudo mount -o ro,loop win${osarch}.iso /mnt/win${osarch}
+
+        echo "Windows ${osarch}: Initializing..."
+        vmcloak init --verbose --win${osarch} win${osarch}base --cpus 2 --ramsize ${ramsize}
+        echo "Windows ${osarch}: Cloning the into the cuckoo instance we will use..."
+        vmcloak clone win${osarch}base  win${osarch}cuckoo
+        echo "Windows ${osarch}: Installing dependencies..."
+        vmcloak install win${osarch}cuckoo adobepdf pillow dotnet java flash vcredist vcredist.version=2015u3 wallpaper ie11
+        #echo "Windows ${osarch}: Attempting to install office..."
+        #vmcloak install win${osarch}cuckoo office office.version=2007 office.isopath=/path/to/office2007.iso office.serialkey=XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+        echo "Windows ${osarch}: Creating 2 snapshots..."
+        vmcloak snapshot --count 2 win${osarch}cuckoo win${osarch} ${vmip}
+        echo "Windows ${osarch}: Unmounting volume..."
+        sudo umount /mnt/win${osarch}
+
+    done
+done
 
 sudo apt-get install postgresql postgresql-contrib -y
 pip install psycopg2
