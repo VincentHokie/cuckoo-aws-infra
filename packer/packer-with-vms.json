@@ -1,0 +1,48 @@
+{
+    "variables": {
+        "aws_access_key": "",
+        "aws_secret_key": "",
+        "ami_name": "base-vm-setup-image--with-vms",
+        "aws_region": "us-east-1",
+        "ssh_username": "ubuntu",
+        "vpc_id": "vpc-0679da464dc76292d",
+        "subnet_id": "subnet-0dd57a7ce7307b0d8"
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "region": "{{user `aws_region`}}",
+            "instance_type": "c5.metal",
+            "force_deregister": "true",
+            "ssh_username": "{{user `ssh_username`}}",
+            "communicator": "ssh",
+            "associate_public_ip_address": true,
+            "subnet_id": "{{user `subnet_id`}}",
+            "ami_name": "{{user `ami_name`}}",
+            "vpc_id": "{{user `vpc_id`}}",
+            "source_ami": "ami-0cd7aedfdb01be92b",
+            "run_tags": {
+                "Name": "base-vm-setup-image--with-vms"
+            },
+            "launch_block_device_mappings": [
+                {
+                    "device_name": "/dev/sda1",
+                    "volume_size": 150,
+                    "volume_type": "gp2"
+                }
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
+        },
+        {
+            "type": "shell",
+            "script": "./provisioners/scripts/with-vms.sh"
+        }
+    ]
+}
