@@ -20,6 +20,19 @@ sudo iptables -A FORWARD -j LOG
 
 sudo sysctl -w net.ipv4.conf.vboxnet0.forwarding=1
 
+# use forked cuckoo installation core files
+source /home/ubuntu/venv/bin/activate
+cd /home/ubuntu
+
+pip install boto3
+
+git clone https://github.com/VincentHokie/cuckoo
+cd cuckoo
+git checkout final-project-alterations
+python stuff/monitor.py
+pip install .
+touch /home/ubuntu/venv/local/lib/python2.7/site-packages/cuckoo/private/.cwd
+
 supervisord -c /home/ubuntu/.cuckoo/supervisord.conf
 
 sudo service uwsgi restart
