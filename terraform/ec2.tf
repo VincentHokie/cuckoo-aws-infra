@@ -1,6 +1,6 @@
 
 resource "aws_instance" "cuckoo_server" {
-  ami           = "ami-0cd7aedfdb01be92b"
+  ami           = "ami-0fe172bd97383077d"
   instance_type = "c5.metal"
 
   key_name = "project-c"
