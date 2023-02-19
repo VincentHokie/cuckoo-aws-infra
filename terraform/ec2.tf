@@ -13,6 +13,8 @@ resource "aws_instance" "cuckoo_server" {
   security_groups = [aws_security_group.allow_tls.id]
   monitoring = true
 
+  user_data = file("files/init.sh")
+
   root_block_device {
     volume_size = 300
   }
