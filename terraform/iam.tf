@@ -32,10 +32,12 @@ resource "aws_iam_role_policy" "cuckoo_role_policy" {
         Action = [
             "s3:GetObject",
             "s3:ListBucket",
-            "s3:HeadObject"
         ]
         Effect   = "Allow"
-        Resource = "arn:aws:s3:::${aws_s3_bucket.cuckoo_vms.bucket}/*"
+        Resource = [
+          aws_s3_bucket.cuckoo_vms.arn,
+          "${aws_s3_bucket.cuckoo_vms.arn}/*"
+        ]
         Sid = "VMDownlaodAccess"
       },{
         Action = [
