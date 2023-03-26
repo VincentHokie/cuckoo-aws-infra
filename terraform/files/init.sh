@@ -31,13 +31,14 @@ cd cuckoo
 git checkout final-project-alterations
 python stuff/monitor.py
 pip install .
-cuckoo migrate
 
-cd /home/ubuntu/vmcloak/
+export HOME=/home/ubuntu
+cd /home/ubuntu/vmcloak
+git config --global --add safe.directory /home/ubuntu/vmcloak
 git checkout project-fixes
 git fetch
 git pull
-sudo pip install .
+pip install .
 
 cat >/home/ubuntu/vmcloak.sh <<EOL
 #!/bin/bash
