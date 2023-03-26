@@ -31,6 +31,7 @@ cd cuckoo
 git checkout final-project-alterations
 python stuff/monitor.py
 pip install .
+cuckoo migrate
 
 cd /home/ubuntu/vmcloak/
 git checkout project-fixes
