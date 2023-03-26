@@ -51,11 +51,40 @@ vdi=\$6
 
 . /home/ubuntu/venv/bin/activate
 
+echo "************************************************"
+echo "*              VMCloak Init                    *"
+echo "************************************************"
+
 HOME=/home/ubuntu vmcloak init --verbose --win\${osversion}x\${osarch} custom-\${vmname} --cpus \$cpu --ramsize \$ram --vdifile \$vdi
+
+echo "************************************************"
+echo "*              VMCloak Clone                   *"
+echo "************************************************"
+
 HOME=/home/ubuntu vmcloak clone custom-\${vmname} custom-\${vmname}-cuckoo
+
+echo "************************************************"
+echo "*            VMCloak Install                   *"
+echo "************************************************"
+
 HOME=/home/ubuntu vmcloak install custom-\${vmname}-cuckoo adobepdf pillow dotnet java flash vcredist vcredist.version=2015u3 wallpaper ie11
+
+echo "************************************************"
+echo "*           VMCloak Snapshot                   *"
+echo "************************************************"
+
 HOME=/home/ubuntu vmcloak snapshot --count 1 custom-\${vmname}-cuckoo custom-\${vmname}-cuckoo-win\${osversion}x\${osarch} 192.168.56.100
+
+echo "************************************************"
+echo "*              Machine Add                     *"
+echo "************************************************"
+
 cuckoo machine --add --resultserver "192.168.56.1:2042" custom-\${vmname}-cuckoo-win\${osversion}x\${osarch} 192.168.56.100
+
+echo "************************************************"
+echo "*          VM Creation Complete                *"
+echo "************************************************"
+
 EOL
 
 chmod +x /home/ubuntu/vmcloak.sh
