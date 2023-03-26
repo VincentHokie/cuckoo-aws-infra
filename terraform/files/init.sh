@@ -37,7 +37,7 @@ cd /home/ubuntu/vmcloak/
 git checkout project-fixes
 git fetch
 git pull
-pip install .
+sudo pip install .
 
 cat >/home/ubuntu/vmcloak.sh <<EOL
 #!/bin/bash
