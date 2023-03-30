@@ -68,19 +68,19 @@ echo "************************************************"
 echo "*            VMCloak Install                   *"
 echo "************************************************"
 
-HOME=/home/ubuntu vmcloak install custom-\${vmname}-cuckoo adobepdf pillow dotnet java flash vcredist vcredist.version=2015u3 wallpaper ie11
+HOME=/home/ubuntu vmcloak install --debug custom-\${vmname}-cuckoo adobepdf pillow dotnet java flash vcredist vcredist.version=2015u3 wallpaper ie11
 
 echo "************************************************"
 echo "*           VMCloak Snapshot                   *"
 echo "************************************************"
 
-HOME=/home/ubuntu vmcloak snapshot --count 1 custom-\${vmname}-cuckoo custom-\${vmname}-cuckoo-win\${osversion}x\${osarch} 192.168.56.100
+HOME=/home/ubuntu vmcloak snapshot --debug custom-\${vmname}-cuckoo custom-\${vmname}-cuckoo-win\${osversion}x\${osarch} 192.168.56.2
 
 echo "************************************************"
 echo "*              Machine Add                     *"
 echo "************************************************"
 
-cuckoo machine --add --resultserver "192.168.56.1:2042" custom-\${vmname}-cuckoo-win\${osversion}x\${osarch} 192.168.56.100
+cuckoo machine --add --resultserver "192.168.56.1:2042" custom-\${vmname}-cuckoo-win\${osversion}x\${osarch} 192.168.56.2
 
 echo "************************************************"
 echo "*          VM Creation Complete                *"
